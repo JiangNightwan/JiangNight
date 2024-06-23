@@ -28,7 +28,7 @@ DEBIAN_FRONTEND=noninteractive proot-distro install ubuntu
 
     echo "Ubuntu成功安装到Termux"
 
-echo "正在安装相应软件喵~"
+echo "正在安装相应软件"
 
 DEBIAN_FRONTEND=noninteractive pkg install git vim curl xz-utils -y
 
