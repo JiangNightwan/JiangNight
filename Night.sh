@@ -4,7 +4,7 @@ echo "
 安卓一键安装脚本
 "
 
-echo -e "\033[0;31m！！！开魔法！！！代理本软件和浏览器\033[0m\n"
+echo -e "\033[0;31m开魔法！开魔法！开魔法！\033[0m\n"
 
 read -p "确保开了魔法后按回车继续"
 
@@ -28,7 +28,7 @@ DEBIAN_FRONTEND=noninteractive proot-distro install ubuntu
 
     echo "Ubuntu成功安装到Termux"
 
-echo "正在安装相应软件"
+echo "正在安装相应软件喵~"
 
 DEBIAN_FRONTEND=noninteractive pkg install git vim curl xz-utils -y
 
@@ -52,9 +52,18 @@ git clone https://github.com/SillyTavern/SillyTavern
 fi
 
 git clone -b test https://github.com/teralomaniac/clewd
+
+echo -e "\033[0;33m本操作为配置下载\033[0m"
+read -p "回车进行导入"
+git clone https://github.com/hopingmiao/promot.git st_promot
+if  [ ! -d "st_promot" ]; then
+    echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因网络波动配置文件下载失败了，更换网络后再试\n\033[0m"
+else
+    cp -r $current/root/st_promot/. $current/root/SillyTavern/public/'OpenAI Settings'/
+    echo -e "\033[0;33m配置已成功导入，安装完毕后启动酒馆即可查看\033[0m"
 fi
 
-curl -O https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/sac.sh
+curl -O https://raw.githubusercontent.com/JiangNightwan/JiangNight/Termux/sac.sh
 
 if [ ! -f "$current/root/sac.sh" ]; then
    echo "启动文件下载失败了，换个魔法或者手动下载"
