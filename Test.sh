@@ -1,12 +1,7 @@
 #!/bin/bash
 
 echo "                                              
-喵喵一键安卓脚本
-作者: hoping喵，坏水秋
-来自: Claude2.1先行破限组
-群号: 704819371 / 910524479 / 304690608
-类脑Discord: https://discord.gg/HWNkueX34q
-"
+安卓一键脚本
 
 echo -e "\033[0;31m开魔法！开魔法！开魔法！\033[0m\n"
 
@@ -26,13 +21,13 @@ DEBIAN_FRONTEND=noninteractive proot-distro install ubuntu
 
 # Check Ubuntu installed successfully
  if [ ! -d "$current" ]; then
-   echo "Ubuntu安装失败了，请更换魔法或者手动安装Ubuntu喵~"
+   echo "Ubuntu安装失败了，请更换魔法或者手动安装Ubuntu"
     exit 1
  fi
 
     echo "Ubuntu成功安装到Termux"
 
-echo "正在安装相应软件喵~"
+echo "正在安装相应软件"
 
 DEBIAN_FRONTEND=noninteractive pkg install git vim curl xz-utils -y
 
@@ -57,14 +52,14 @@ fi
 
 git clone -b test https://github.com/teralomaniac/clewd
 
-echo -e "\033[0;33m本操作仅为破限下载提供方便，所有破限皆为收录，喵喵不具有破限所有权\033[0m"
-read -p "回车进行导入喵~"
+echo -e "\033[0;33m下载破限\033[0m"
+read -p "回车进行导入"
 git clone https://github.com/hopingmiao/promot.git st_promot
 if  [ ! -d "st_promot" ]; then
-    echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因网络波动预设文件下载失败了，更换网络后再试喵~\n\033[0m"
+    echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因网络波动预设文件下载失败了，更换网络后再试\n\033[0m"
 else
     cp -r $current/root/st_promot/. $current/root/SillyTavern/public/'OpenAI Settings'/
-    echo -e "\033[0;33m破限已成功导入，安装完毕后启动酒馆即可看到喵~\033[0m"
+    echo -e "\033[0;33m破限已成功导入，安装完毕后启动酒馆即可看到\033[0m"
 fi
 
 curl -O https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/sac.sh
