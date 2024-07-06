@@ -19,6 +19,7 @@ if [ $? -ne 0 ]; then
     echo "- 软件源配置是否正确"
     exit 1
 fi
+echo "apt软件包更新完成。"
 
 echo "正在升级apt软件包..."
 sudo apt upgrade -y
@@ -28,6 +29,7 @@ if [ $? -ne 0 ]; then
     echo "- 软件依赖关系是否正确"
     exit 1
 fi
+echo "apt软件包升级完成。"
 
 # 更新并升级pkg软件包
 echo "正在更新pkg软件包..."
@@ -38,6 +40,7 @@ if [ $? -ne 0 ]; then
     echo "- Termux软件源是否配置正确"
     exit 1
 fi
+echo "pkg软件包更新完成。"
 
 echo "正在升级pkg软件包..."
 pkg upgrade -y
@@ -46,6 +49,7 @@ if [ $? -ne 0 ]; then
     echo "- Termux依赖关系是否正确"
     exit 1
 fi
+echo "pkg软件包升级完成。"
 
 echo "所有软件包均已更新和升级完成。"
 echo "操作成功完成！"
