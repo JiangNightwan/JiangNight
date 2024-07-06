@@ -31,19 +31,33 @@ progress_bar() {
     echo "]"
 }
 
-yes | apt update
-progress_bar 5
+# 执行命令并捕获错误
+execute_command() {
+    local command=$1
+    eval "$command" &>/dev/null
+    if [ $? -ne 0 ]; then
+        echo "命令失败：$command"
+        exit 1
+    fi
+}
 
-yes | apt upgrade
+yes | apt update &>/dev/null
 progress_bar 5
+echo "更新完成"
+
+yes | apt upgrade &>/dev/null
+progress_bar 5
+echo "升级完成"
 
 # 安装proot-distro
-DEBIAN_FRONTEND=noninteractive pkg install proot-distro -y
+execute_command "DEBIAN_FRONTEND=noninteractive pkg install proot-distro -y"
 progress_bar 5
+echo "proot-distro安装完成"
 
 # 创建并安装Ubuntu
-DEBIAN_FRONTEND=noninteractive proot-distro install ubuntu
+execute_command "DEBIAN_FRONTEND=noninteractive proot-distro install ubuntu"
 progress_bar 10
+echo "Ubuntu安装完成"
 
 # 检查Ubuntu是否成功安装
 if [ ! -d "$current" ]; then
@@ -53,31 +67,36 @@ fi
 
 echo "Ubuntu成功安装到Termux"
 
-echo "正在安装相应软件喵~"
-DEBIAN_FRONTEND=noninteractive pkg install git vim curl xz-utils -y
+# 安装相应软件
+execute_command "DEBIAN_FRONTEND=noninteractive pkg install git vim curl xz-utils -y"
 progress_bar 5
+echo "软件包安装完成"
 
 if [ -d "SillyTavern" ]; then
-  cp -r SillyTavern $current/root/
+  execute_command "cp -r SillyTavern $current/root/"
   progress_bar 2
+  echo "SillyTavern复制完成"
 fi
 
 cd $current/root
 
 echo "正在为Ubuntu安装node喵~"
 if [ ! -d "$current/node-v20.15.0-linux-arm64" ]; then
-    curl -O https://nodejs.org/dist/v20.15.0/node-v20.15.0-linux-arm64.tar.xz
+    execute_command "curl -O https://nodejs.org/dist/v20.15.0/node-v20.15.0-linux-arm64.tar.xz"
     progress_bar 5
-    tar xf node-v20.15.0-linux-arm64.tar.xz
+    execute_command "tar xf node-v20.15.0-linux-arm64.tar.xz"
     progress_bar 3
     echo "export PATH=\$PATH:/root/node-v20.15.0-linux-arm64/bin" >> $current/etc/profile
     progress_bar 1
+    echo "Node.js安装完成"
 fi
 
 if [ ! -d "SillyTavern" ]; then
-    git clone https://github.com/SillyTavern/SillyTavern
+    execute_command "git clone https://github.com/SillyTavern/SillyTavern"
     progress_bar 5
+    echo "SillyTavern仓库克隆完成"
 fi
 
-git clone -b test https://github.com/teralomaniac/clewd
+execute_command "git clone -b test https://github.com/teralomaniac/clewd"
 progress_bar 5
+echo "clewd仓库克隆完成"
