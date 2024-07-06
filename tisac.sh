@@ -1,87 +1,33 @@
 #!/bin/bash
 
-echo "                                              
-喵喵一键安卓脚本
-作者: hoping喵，坏水秋
-来自: Claude2.1先行破限组
-群号: 704819371 / 910524479 / 304690608
-类脑Discord: https://discord.gg/HWNkueX34q
-"
+echo "请开启魔法，且保持良好的网络环境"
 
-echo -e "\033[0;31m开魔法！开魔法！开魔法！\033[0m\n"
+# 用户选择是否继续
+read -p "是否继续更新和升级软件包？(yes/no): " choice
 
-read -p "确保开了魔法后按回车继续"
-
-current=/data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/ubuntu
-
-# 更新和升级系统，并自动处理配置文件冲突
-yes | apt update -o Dpkg::Options::="--force-confold"
-yes | apt upgrade -o Dpkg::Options::="--force-confold"
-
-# 安装proot-distro
-DEBIAN_FRONTEND=noninteractive pkg install proot-distro -y
-
-# 创建并安装Ubuntu
-DEBIAN_FRONTEND=noninteractive proot-distro install ubuntu
-
-# 检查Ubuntu是否安装成功
-if [ ! -d "$current" ]; then
-   echo "Ubuntu安装失败了，请更换魔法或者手动安装Ubuntu喵~"
-   exit 1
+if [ "$choice" != "yes" ]; then
+    echo "用户选择了不继续，脚本已退出。"
+    exit 0
 fi
 
-echo "Ubuntu成功安装到Termux"
-
-echo "正在安装相应软件喵~"
-DEBIAN_FRONTEND=noninteractive pkg install git vim curl xz-utils -y
-
-# 复制SillyTavern文件夹
-if [ -d "SillyTavern" ]; then
-  cp -r SillyTavern $current/root/
-fi
-
-cd $current/root
-
-echo "正在为Ubuntu安装node喵~"
-if [ ! -d "$current/node-v20.15.0-linux-arm64" ]; then
-    curl -O https://nodejs.org/dist/v20.15.0/node-v20.15.0-linux-arm64.tar.xz
-    tar xf node-v20.15.0-linux-arm64.tar.xz
-    echo "export PATH=\$PATH:/root/node-v20.15.0-linux-arm64/bin" >> $current/etc/profile
-fi
-
-# 克隆SillyTavern仓库
-if [ ! -d "SillyTavern" ]; then
-    git clone https://github.com/SillyTavern/SillyTavern
-fi
-
-git clone -b test https://github.com/teralomaniac/clewd
-
-echo -e "\033[0;33m本操作仅为破限下载提供方便，所有破限皆为收录，喵喵不具有破限所有权\033[0m"
-read -p "回车进行导入喵~"
-
-# 克隆promot仓库
-git clone https://github.com/hopingmiao/promot.git st_promot
-
-if [ ! -d "st_promot" ]; then
-    echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因网络波动预设文件下载失败了，更换网络后再试喵~\n\033[0m"
+# 更新并升级apt软件包
+echo "正在更新apt软件包..."
+sudo apt update && sudo apt upgrade -y
+if [ $? -eq 0 ]; then
+    echo "apt软件包更新和升级完成。"
 else
-    cp -r $current/root/st_promot/. $current/root/SillyTavern/public/'OpenAI Settings'/
-    echo -e "\033[0;33m破限已成功导入，安装完毕后启动酒馆即可看到喵~\033[0m"
+    echo "apt软件包更新和升级失败。"
+    exit 1
 fi
 
-curl -O https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/sac.sh
-
-if [ ! -f "$current/root/sac.sh" ];然
-then
-   echo "启动文件下载失败了，换个魔法或者手动下载试试吧"
-   exit 1
+# 更新并升级pkg软件包
+echo "正在更新pkg软件包..."
+pkg update && pkg upgrade -y
+if [ $? -eq 0 ]; then
+    echo "pkg软件包更新和升级完成。"
+else
+    echo "pkg软件包更新和升级失败。"
+    exit 1
 fi
 
-# 创建符号链接并更新.bashrc文件
-ln -s /data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/ubuntu/root $current/root
-echo "bash /root/sac.sh" >> $current/root/.bashrc
-echo "proot-distro login ubuntu" >> /data/data/com.termux/files/home/.bashrc
-
-source /data/data/com.termux/files/home/.bashrc
-
-exit 0
+echo "所有软件包均已更新和升级完成。"
