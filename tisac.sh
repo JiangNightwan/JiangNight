@@ -15,7 +15,7 @@ check_vpn_connection() {
 install_package() {
     package_name=$1
     echo -e "\n\e[1;33m正在安装 $package_name...\e[0m"
-    DEBIAN_FRONTEND=noninteractive pkg install $package_name -y > /dev/null 2>&1
+    DEBIAN_FRONTEND=noninteractive apt install $package_name -y > /dev/null 2>&1
     if [ $? -eq 0 ]; then
         echo -e "\e[1;32m$package_name 安装成功\e[0m"
     else
@@ -27,10 +27,10 @@ install_package() {
 # Function to download and extract Node.js
 install_nodejs() {
     echo -e "\n\e[1;33m正在为Ubuntu安装Node.js...\e[0m"
-    if [ ! -d node-v20.10.0-linux-arm64.tar.xz ]; then
-        curl -O https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-arm64.tar.xz > /dev/null 2>&1
-        tar xf node-v20.10.0-linux-arm64.tar.xz
-        echo "export PATH=\$PATH:/root/node-v20.10.0-linux-arm64/bin" >> $current/etc/profile
+    if [ ! -d /root/node-v20.15.0-linux-arm64 ]; then
+        curl -O https://nodejs.org/dist/v20.15.0/node-v20.15.0-linux-arm64.tar.xz > /dev/null 2>&1
+        tar xf node-v20.15.0-linux-arm64.tar.xz
+        echo "export PATH=\$PATH:$(pwd)/node-v20.15.0-linux-arm64/bin" >> /root/.bashrc
     fi
 }
 
@@ -44,11 +44,26 @@ clone_repository() {
     fi
 }
 
+# Function to check installed package versions
+check_installed_versions() {
+    echo -e "\n\e[1;33m正在检查已安装程序的版本...\e[0m"
+    echo -n "Node.js版本: "
+    node --version
+    echo -n "git版本: "
+    git --version
+    echo -n "vim版本: "
+    vim --version | head -n 1
+    echo -n "curl版本: "
+    curl --version | head -n 1
+    echo -n "xz-utils版本: "
+    xz --version | head -n 1
+}
+
 # Main script starts here
 
 echo "                                              
 安卓一键部署脚本
-ID:JiangNight
+ID: JiangNight
 "
 
 # Check VPN connection before proceeding
@@ -106,6 +121,9 @@ echo "bash /root/sac.sh" >> $current/root/.bashrc
 echo "proot-distro login ubuntu" >> /data/data/com.termux/files/home/.bashrc
 
 source /data/data/com.termux/files/home/.bashrc
+
+# Check installed package versions
+check_installed_versions
 
 echo -e "\n\e[1;32m一键安装完成！祝你玩得开心~\e[0m"
 exit 0
