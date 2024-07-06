@@ -74,5 +74,36 @@ if [ $? -ne 0 ]; then
 fi
 echo -e "${GREEN}pkg软件包升级完成。${NC}"
 
+# 安装 proot-distro
+echo -e "${GREEN}正在安装proot-distro...${NC}"
+show_progress &
+PROGRESS_PID=$!
+pkg install proot-distro -y > /dev/null 2>&1
+kill $PROGRESS_PID
+wait $PROGRESS_PID 2>/dev/null
+if [ $? -ne 0 ]; then
+    echo -e "${RED}proot-distro安装失败。${NC}"
+    exit 1
+fi
+echo -e "${GREEN}proot-distro安装完成。${NC}"
+
+# 安装 Ubuntu
+echo -e "${GREEN}正在安装Ubuntu...${NC}"
+show_progress &
+PROGRESS_PID=$!
+proot-distro install ubuntu > /dev/null 2>&1
+kill $PROGRESS_PID
+wait $PROGRESS_PID 2>/dev/null
+if [ $? -ne 0 ]; then
+    echo -e "${RED}Ubuntu安装失败。${NC}"
+    exit 1
+fi
+echo -e "${GREEN}Ubuntu安装完成。${NC}"
+
+# 添加自启动命令到 .bashrc 并刷新
+echo -e "${GREEN}正在配置自启动...${NC}"
+echo "proot-distro login ubuntu" >> /data/data/com.termux/files/home/.bashrc
+source /data/data/com.termux/files/home/.bashrc
+
 echo -e "${GREEN}所有软件包均已更新和升级完成。${NC}"
 echo -e "${GREEN}操作成功完成！${NC}"
