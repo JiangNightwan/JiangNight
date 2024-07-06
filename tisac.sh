@@ -12,7 +12,7 @@ fi
 
 # 更新并升级apt软件包
 echo "正在更新apt软件包..."
-sudo apt update
+apt update
 if [ $? -ne 0 ]; then
     echo "apt软件包更新失败。请检查以下可能原因："
     echo "- 网络连接是否正常"
@@ -22,7 +22,7 @@ fi
 echo "apt软件包更新完成。"
 
 echo "正在升级apt软件包..."
-sudo apt upgrade -y
+apt upgrade -y
 if [ $? -ne 0 ]; then
     echo "apt软件包升级失败。请检查以下可能原因："
     echo "- 硬盘空间是否足够"
