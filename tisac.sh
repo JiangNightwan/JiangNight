@@ -15,19 +15,14 @@ if [ "$choice" != "yes" ]; then
     exit 0
 fi
 
-# 简易进度条函数
+# 循环进度条函数
 show_progress() {
-    echo -n "["
-    for ((i=0; i<20; i++)); do
-        echo -n " "
+    while :; do
+        for s in / - \\ \|; do
+            printf "\r$s"
+            sleep 0.1
+        done
     done
-    echo -n "]"
-    echo -ne "\r["
-    for ((i=0; i<20; i++)); do
-        echo -n "="
-        sleep 0.1
-    done
-    echo "]"
 }
 
 # 更新并升级apt软件包
@@ -43,8 +38,10 @@ echo -e "${GREEN}apt软件包更新完成。${NC}"
 
 echo -e "${GREEN}正在升级apt软件包...${NC}"
 show_progress &
-apt upgrade -y > /dev/null 2>&1
-wait
+PROGRESS_PID=$!
+yes | apt upgrade -y > /dev/null 2>&1
+kill $PROGRESS_PID
+wait $PROGRESS_PID 2>/dev/null
 if [ $? -ne 0 ]; then
     echo -e "${RED}apt软件包升级失败。请检查以下可能原因：${NC}"
     echo "- 硬盘空间是否足够"
@@ -66,8 +63,10 @@ echo -e "${GREEN}pkg软件包更新完成。${NC}"
 
 echo -e "${GREEN}正在升级pkg软件包...${NC}"
 show_progress &
-pkg upgrade -y > /dev/null 2>&1
-wait
+PROGRESS_PID=$!
+yes | pkg upgrade -y > /dev/null 2>&1
+kill $PROGRESS_PID
+wait $PROGRESS_PID 2>/dev/null
 if [ $? -ne 0 ]; then
     echo -e "${RED}pkg软件包升级失败。请检查以下可能原因：${NC}"
     echo "- Termux依赖关系是否正确"
