@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "
+echo "                                              
 喵喵一键安卓脚本
 作者: hoping喵，坏水秋
 来自: Claude2.1先行破限组
@@ -14,15 +14,15 @@ read -p "确保开了魔法后按回车继续"
 
 current=/data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/ubuntu
 
-# 更新和升级系统，并屏蔽状态输出
-yes | apt update -o Dpkg::Options::="--force-confold" >/dev/null 2>&1
-yes | apt upgrade -o Dpkg::Options::="--force-confold" >/dev/null 2>&1
+# 更新和升级系统，并自动处理配置文件冲突
+yes | apt update -o Dpkg::Options::="--force-confold"
+yes | apt upgrade -o Dpkg::Options::="--force-confold"
 
 # 安装proot-distro
-DEBIAN_FRONTEND=noninteractive pkg install proot-distro -y >/dev/null 2>&1
+DEBIAN_FRONTEND=noninteractive pkg install proot-distro -y
 
 # 创建并安装Ubuntu
-DEBIAN_FRONTEND=noninteractive proot-distro install ubuntu >/dev/null 2>&1
+DEBIAN_FRONTEND=noninteractive proot-distro install ubuntu
 
 # 检查Ubuntu是否安装成功
 if [ ! -d "$current" ]; then
@@ -33,7 +33,7 @@ fi
 echo "Ubuntu成功安装到Termux"
 
 echo "正在安装相应软件喵~"
-DEBIAN_FRONTEND=noninteractive pkg install git vim curl xz-utils -y >/dev/null 2>&1
+DEBIAN_FRONTEND=noninteractive pkg install git vim curl xz-utils -y
 
 # 复制SillyTavern文件夹
 if [ -d "SillyTavern" ]; then
@@ -43,25 +43,24 @@ fi
 cd $current/root
 
 echo "正在为Ubuntu安装node喵~"
-if [ ! -d "$current/node-v20.15.0-linux-arm64" ];然
-then
-    curl -O https://nodejs.org/dist/v20.15.0/node-v20.15.0-linux-arm64.tar.xz >/dev/null 2>&1
-    tar xf node-v20.15.0-linux-arm64.tar.xz >/dev/null 2>&1
+if [ ! -d "$current/node-v20.15.0-linux-arm64" ]; then
+    curl -O https://nodejs.org/dist/v20.15.0/node-v20.15.0-linux-arm64.tar.xz
+    tar xf node-v20.15.0-linux-arm64.tar.xz
     echo "export PATH=\$PATH:/root/node-v20.15.0-linux-arm64/bin" >> $current/etc/profile
 fi
 
-# 如果还没有克隆SillyTavern，则进行克隆
+# 克隆SillyTavern仓库
 if [ ! -d "SillyTavern" ]; then
-    git clone https://github.com/SillyTavern/SillyTavern >/dev/null 2>&1
+    git clone https://github.com/SillyTavern/SillyTavern
 fi
 
-git clone -b test https://github.com/teralomaniac/clewd >/dev/null 2>&1
+git clone -b test https://github.com/teralomaniac/clewd
 
 echo -e "\033[0;33m本操作仅为破限下载提供方便，所有破限皆为收录，喵喵不具有破限所有权\033[0m"
 read -p "回车进行导入喵~"
 
 # 克隆promot仓库
-git clone https://github.com/hopingmiao/promot.git st_promot >/dev/null 2>&1
+git clone https://github.com/hopingmiao/promot.git st_promot
 
 if [ ! -d "st_promot" ]; then
     echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因网络波动预设文件下载失败了，更换网络后再试喵~\n\033[0m"
@@ -70,8 +69,7 @@ else
     echo -e "\033[0;33m破限已成功导入，安装完毕后启动酒馆即可看到喵~\033[0m"
 fi
 
-# 下载启动脚本
-curl -O https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/sac.sh >/dev/null 2>&1
+curl -O https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/sac.sh
 
 if [ ! -f "$current/root/sac.sh" ];然
 then
