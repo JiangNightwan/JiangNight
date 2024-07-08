@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "                                              
-安卓本地环境一键部署
+安卓本地环境一键部署测试
 作者: JiangNight
 "
 
@@ -82,7 +82,7 @@ cd $current/root
 
 # 下载并解压node.js
 echo "正在安装node..."
-if [ ! -d "node-v20.10.0-linux-arm64.tar.xz" ]; then
+if [ ! -d "node-v20.15.0-linux-arm64.tar.xz" ]; then
     curl -O https://nodejs.org/dist/v20.15.0/node-v20.15.0-linux-arm64.tar.xz
     tar node-v20.15.0-linux-arm64.tar.xz
 
