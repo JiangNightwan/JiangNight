@@ -57,26 +57,42 @@ fi
 
 git clone -b test https://github.com/teralomaniac/clewd
 
-# 提醒用户脚本仅提供破限下载方便，不拥有破限所有权
+# 提醒用户脚本安装Sillytavern配置文件
 echo -e "\033[0;33m安装Sillytavern初始配置\033[0m"
 read -p "回车进行安装"
 
 # 下载并解压 default-user.tar.gz 文件
-wget -O default-user.tar.gz https://github.com/JiangNightwan/settings/raw/main/default-user.tar.gz
+if command -v curl >/dev/null 2>&1; then
+    curl -o default-user.tar.gz -L https://github.com/JiangNightwan/settings/raw/main/default-user.tar.gz
+else
+    echo "错误：未找到 curl 命令，请安装 curl 或使用其他方法下载文件。"
+    exit 1
+fi
+
+if [ $? -ne 0 ]; then
+    echo "下载文件失败，请检查网络连接或文件是否存在。"
+    exit 1
+fi
+
 tar -zxvf default-user.tar.gz
 
 if [ $? -ne 0 ]; then
-    echo -e "下载或解压文件失败，请检查网络或文件是否存在。"
+    echo "解压文件失败，请检查文件是否正确或者手动解压查看错误信息。"
     exit 1
 fi
 
 # 复制并覆盖到目标文件夹
-cp -r default-user/* $current/root/Sillytavern/data/default-user/*
+if [ -d "default-user" ]; then
+    cp -r default-user/* $current/root/Sillytavern/data/default-user/
+else
+    echo "错误：未找到解压后的 default-user 文件夹。"
+    exit 1
+fi
 
 # 清理临时文件
 rm -rf default-user default-user.tar.gz
 
-echo -e "\033[0;33m文件已成功复制并覆盖到目标文件夹。\033[0m"
+echo "文件已成功复制并覆盖到目标文件夹。"
 fi
 
 # 下载启动脚本
