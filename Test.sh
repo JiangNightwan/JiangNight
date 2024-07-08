@@ -92,8 +92,7 @@ fi
 # 清理临时文件
 rm -rf default-user default-user.tar.gz
     echo "文件已成功复制并覆盖到目标文件夹。"
-    exit 1
-fi
+    # 继续执行其他操作
 
 # 下载启动脚本
 curl -O https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/sac.sh
