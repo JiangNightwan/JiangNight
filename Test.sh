@@ -15,15 +15,6 @@ fi
 
 echo -p "\033[0;31m确保网络状态良好后按回车继续，遇到需要选择的选项手动输入y\033[0m\n"
 
-# 更新和升级 pkg
-pkg update && pkg upgrade -y
-if [ $? -eq 0 ]; then
-    echo -e "\033[0;32mpkg 更新和升级成功。\033[0m"
-else
-    echo -e "\033[0;31mpkg 更新和升级失败。\033[0m"
-    exit 1
-fi
-
 # 更新和升级 apt
 yes | apt update
 if [ $? -eq 0 ]; then
