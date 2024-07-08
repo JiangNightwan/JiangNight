@@ -13,7 +13,7 @@ else
     echo "无法获取当前IP地址"
 fi
 
-echo -e "\033[0;31m确保网络状态良好后按回车继续，遇到需要选择的选项手动输入y\033[0m\n"
+echo -p "\033[0;31m确保网络状态良好后按回车继续，遇到需要选择的选项手动输入y\033[0m\n"
 
 # 更新和升级 pkg
 pkg update && pkg upgrade -y
@@ -25,11 +25,19 @@ else
 fi
 
 # 更新和升级 apt
-apt update && apt upgrade -y
+yes | apt update
 if [ $? -eq 0 ]; then
-    echo -e "\033[0;32mapt 更新和升级成功。\033[0m"
+    echo -e "\033[0;32mapt 更新成功。\033[0m"
 else
-    echo -e "\033[0;31mapt 更新和升级失败。\033[0m"
+    echo -e "\033[0;31mapt 更新失败。\033[0m"
+    exit 1
+fi
+
+yes | apt upgrade
+if [ $? -eq 0 ]; then
+    echo -e "\033[0;32mapt 升级成功。\033[0m"
+else
+    echo -e "\033[0;31mapt 升级失败。\033[0m"
     exit 1
 fi
 
