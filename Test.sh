@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "                                              
-安卓本地环境一键部署测试
+安卓本地环境一键部署
 作者: JiangNight
 "
 
@@ -56,24 +56,6 @@ if [ $? -eq 0 ]; then
     echo -e "\033[0;32mUbuntu 安装成功。\033[0m"
 else
     echo -e "\033[0;31mUbuntu 安装失败。\033[0m"
-    exit 1
-fi
-
-# 添加登录命令到 .bashrc 文件
-echo "proot-distro login ubuntu" >> /data/data/com.termux/files/home/.bashrc
-if [ $? -eq 0 ]; then
-    echo -e "\033[0;32m.bashrc 文件中添加命令成功。\033[0m"
-else
-    echo -e "\033[0;31m添加命令到 .bashrc 文件失败。\033[0m"
-    exit 1
-fi
-
-# 源化 .bashrc 文件
-source /data/data/com.termux/files/home/.bashrc
-if [ $? -eq 0 ]; then
-    echo -e "\033[0;32m.bashrc 文件源化成功。\033[0m"
-else
-    echo -e "\033[0;31m.bashrc 文件源化失败。\033[0m"
     exit 1
 fi
 
