@@ -1,80 +1,60 @@
 #!/bin/bash
 
-echo "                                              
-安卓一键脚本
-
-echo -e "\033[0;31m开魔法！开魔法！开魔法！\033[0m\n"
-
-read -p "确保开了魔法后按回车继续"
-
-current=/data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/ubuntu
-
-yes | apt update
-
-yes | apt upgrade
-
-# 安装proot-distro
-DEBIAN_FRONTEND=noninteractive pkg install proot-distro -y
-
-# 创建并安装Ubuntu
-DEBIAN_FRONTEND=noninteractive proot-distro install ubuntu
-
-# Check Ubuntu installed successfully
- if [ ! -d "$current" ]; then
-   echo "Ubuntu安装失败了，请更换魔法或者手动安装Ubuntu"
-    exit 1
- fi
-
-    echo "Ubuntu成功安装到Termux"
-
-echo "正在安装相应软件"
-
-DEBIAN_FRONTEND=noninteractive pkg install git vim curl xz-utils -y
-
-if [ -d "SillyTavern" ]; then
-  cp -r SillyTavern $current/root/
-fi
-
-cd $current/root
-
-echo "正在为Ubuntu安装node喵~"
-if [ ! -d node-v20.10.0-linux-arm64.tar.xz ]; then
-    curl -O https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-arm64.tar.xz
-
-tar xf node-v20.10.0-linux-arm64.tar.xz
-
-echo "export PATH=\$PATH:/root/node-v20.10.0-linux-arm64/bin" >>$current/etc/profile
-fi
-
-if [ ! -d "SillyTavern" ]; then
-git clone https://github.com/SillyTavern/SillyTavern
-fi
-
-git clone -b test https://github.com/teralomaniac/clewd
-
-echo -e "\033[0;33m下载破限\033[0m"
-read -p "回车进行导入"
-git clone https://github.com/hopingmiao/promot.git st_promot
-if  [ ! -d "st_promot" ]; then
-    echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因网络波动预设文件下载失败了，更换网络后再试\n\033[0m"
+# Step 1: Update and upgrade pkg
+pkg update && pkg upgrade -y
+if [ $? -eq 0 ]; then
+    echo "pkg update and upgrade successful."
 else
-    cp -r $current/root/st_promot/. $current/root/SillyTavern/public/'OpenAI Settings'/
-    echo -e "\033[0;33m破限已成功导入，安装完毕后启动酒馆即可看到\033[0m"
+    echo "pkg update and upgrade failed."
+    exit 1
 fi
 
-curl -O https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/sac.sh
-
-if [ ! -f "$current/root/sac.sh" ]; then
-   echo "启动文件下载失败了，换个魔法或者手动下载试试吧"
-   exit
+# Step 2: Update and upgrade apt
+apt update && apt upgrade -y
+if [ $? -eq 0 ]; then
+    echo "apt update and upgrade successful."
+else
+    echo "apt update and upgrade failed."
+    exit 1
 fi
 
-ln -s /data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/ubuntu/root
+# Step 3: Install proot-distro
+pkg install proot-distro -y
+if [ $? -eq 0 ]; then
+    echo "proot-distro installation successful."
+else
+    echo "proot-distro installation failed."
+    exit 1
+fi
 
-echo "bash /root/sac.sh" >>$current/root/.bashrc
+# Step 4: Install Ubuntu using proot-distro
+proot-distro install ubuntu
+if [ $? -eq 0 ]; then
+    echo "Ubuntu installation successful."
+else
+    echo "Ubuntu installation failed."
+    exit 1
+fi
 
-echo "proot-distro login ubuntu" >>/data/data/com.termux/files/home/.bashrc
+# Step 5: Add login command to .bashrc
+echo "proot-distro login ubuntu" >> /data/data/com.termux/files/home/.bashrc
+if [ $? -eq 0 ]; then
+    echo "Command added to .bashrc successfully."
+else
+    echo "Failed to add command to .bashrc."
+    exit 1
+fi
 
+# Step 6: Source the .bashrc file
 source /data/data/com.termux/files/home/.bashrc
+if [ $? -eq 0 ]; then
+    echo "Sourced .bashrc successfully."
+else
+    echo "Failed to source .bashrc."
+    exit 1
+fi
 
+# Final message and exit
+echo "Environment setup complete. Termux will exit in 5 seconds."
+sleep 5
 exit
