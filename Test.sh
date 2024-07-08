@@ -71,7 +71,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # 复制并覆盖到目标文件夹
-cp -r default-user/* $current/root/Sillytavern/data/
+cp -r default-user/* $current/root/Sillytavern/data/default-user/*
 
 # 清理临时文件
 rm -rf default-user default-user.tar.gz
